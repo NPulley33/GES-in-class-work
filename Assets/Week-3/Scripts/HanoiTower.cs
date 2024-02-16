@@ -121,7 +121,8 @@ public class HanoiTower : MonoBehaviour
         currentPegLabel.text = $"Selected Peg: Peg {currentPeg}";
     }
     bool CheckWin() {
-        for (int i = peg3Data.Length - 1; i >= 0; i--) {
+        //something about this is wrong- finds win too soon with 5 pegs
+        for (int i = peg3Data.Length - 1; i > - 1; i--) {
             if (peg3Data[i] == 0) return false;
         }
         return true;
