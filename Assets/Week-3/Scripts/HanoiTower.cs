@@ -20,8 +20,11 @@ public class HanoiTower : MonoBehaviour
     [ContextMenu("Move Right")]
     public void MoveRight()
     {
+        int pegToMove;
+
         //Make sure we aren't the right most peg
-        if (CanMoveRight() == false) return;
+        if (CanMoveRight() == false) pegToMove = -2;
+        else pegToMove = 1;
 
         //Check to see what index and number we are moving from THIS peg
         int[] fromArray = GetPeg(currentPeg);
@@ -32,7 +35,7 @@ public class HanoiTower : MonoBehaviour
 
         //Check to see where in the peg we are moving to that the number
         //should be placed into
-        int[] toArray = GetPeg(currentPeg + 1);
+        int[] toArray = GetPeg(currentPeg + pegToMove);
         int toIndex = GetIndexOfFreeSlot(toArray);
 
         //If the adjacent peg is FULL then we cannot move anything into it
@@ -50,7 +53,7 @@ public class HanoiTower : MonoBehaviour
         MoveNumber(fromArray, fromIndex, toArray, toIndex);
 
         Transform disc = PopDiscFromCurrentPeg();
-        Transform toPeg = GetPegTransform(currentPeg + 1);
+        Transform toPeg = GetPegTransform(currentPeg + pegToMove);
         disc.SetParent(toPeg);
 
         if (CheckWin())
@@ -62,8 +65,11 @@ public class HanoiTower : MonoBehaviour
     [ContextMenu("Move Left")]
     public void MoveLeft()
     {
+        int pegToMove;
+
         //Make sure we aren't the left most peg
-        if (CanMoveLeft() == false) return;
+        if (CanMoveLeft() == false) pegToMove= 2;
+        else pegToMove = -1; 
 
         //Check to see what index and number we are moving from THIS peg
         int[] fromArray = GetPeg(currentPeg);
@@ -74,7 +80,7 @@ public class HanoiTower : MonoBehaviour
 
         //Check to see where in the peg we are moving to that the number
         //should be placed into
-        int[] toArray = GetPeg(currentPeg - 1);
+        int[] toArray = GetPeg(currentPeg + pegToMove);
         int toIndex = GetIndexOfFreeSlot(toArray);
 
         //If the adjacent peg is FULL then we cannot move anything into it
@@ -92,7 +98,7 @@ public class HanoiTower : MonoBehaviour
         MoveNumber(fromArray, fromIndex, toArray, toIndex);
 
         Transform disc = PopDiscFromCurrentPeg();
-        Transform toPeg = GetPegTransform(currentPeg - 1);
+        Transform toPeg = GetPegTransform(currentPeg + pegToMove);
         disc.SetParent(toPeg);
 
         if (CheckWin()) {
