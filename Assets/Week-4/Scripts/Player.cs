@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 namespace Week4 
 {
@@ -16,8 +17,17 @@ namespace Week4
         //    health = 10;
         //}
 
-        [SerializeField]
-        private int health = 10;
+        [SerializeField] private int health = 10;
+
+//#pragma warning disable CS0108 // Member hides inherited member; missing new keyword
+//        private AudioSource audio;
+//#pragma warning restore CS0108 // Member hides inherited member; missing new keyword
+
+        private void Awake()
+        {
+            //audio = GetComponent<AudioSource>();
+        }
+
         public int GetHealth() {
             return health;
         }
@@ -35,14 +45,25 @@ namespace Week4
         }
 
         [ContextMenu("Attack")]
-        void Attack() { 
+        void Attack() {
             Enemy target = FindNewEnemy();
-            target.Damage(5);
+            Vector3 origin = transform.position;
+
+            transform.DOMove(target.transform.position, 0.5f).OnComplete( () => { 
+                target.Damage(5);
+                transform.DOMove(origin, 0.5f);
+            } ); 
+            //lambda- dynamically writing a method while code is running
+
+            //audio.clip = attackSound;
+            //audio.PlayOneShot(attackSound);
+            //AudioManager.PlaySound(AudioManager.SoundType.ATTACK); //putting 0 in works too, but don't
         }
 
         public void Damage(int amount) { 
             health -= amount;
         }
+
 
     }
 }
