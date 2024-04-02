@@ -23,7 +23,7 @@ namespace Flow {
         private int nCols;
         private int row;
         private int col;
-        private int time;
+        //private int time;
 
         //parent of cells
         [SerializeField] Transform GridRoot;
