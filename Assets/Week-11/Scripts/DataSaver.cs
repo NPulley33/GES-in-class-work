@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using UnityEditor;
 using UnityEngine;
 
 public class DataSaver : MonoBehaviour
@@ -34,6 +36,16 @@ public class DataSaver : MonoBehaviour
         Debug.Log(JsonUtility.ToJson(SaveData));
         PlayerPrefs.SetString("SaveData", JsonUtility.ToJson(SaveData));
 
+        //create a path to save to external file (not relative to resource folder)
+        string path = "Assets/Resources/Levels/Level_01.txt";
+        //write text to .txt file
+        StreamWriter writer = new StreamWriter(path, true);
+        writer.WriteLine(JsonUtility.ToJson(SaveData));
+        writer.Close();
+        //re-import the file to update the reference in the editor
+        AssetDatabase.ImportAsset(path);
+
+
         //guarentees that modified data saves
         PlayerPrefs.Save();
     }
@@ -46,8 +58,17 @@ public class DataSaver : MonoBehaviour
         m_dollars = PlayerPrefs.GetFloat(MONEY_ID, 0);
         playerName = PlayerPrefs.GetString(NAME_ID, "No name");
 
-        SaveData = JsonUtility.FromJson<SaveData>(PlayerPrefs.GetString("SaveData"));
+        //SaveData = JsonUtility.FromJson<SaveData>(PlayerPrefs.GetString("SaveData"));
 
+        TextAsset ta = Resources.Load("Levels/Level_01") as TextAsset;
+        SaveData = JsonUtility.FromJson<SaveData>(ta.text);
+        //if done using text asses you can do Resources.UnloadAsset(ta); (memory collection)
+
+        /*
+        TextAsset ta2 = Resources.Load("en");
+        string contents = ta2.text;
+
+         */
     }
 
     [ContextMenu("Add Dollar")]
